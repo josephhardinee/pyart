@@ -4,7 +4,6 @@ pyart.io.chl
 
 Utilities for reading CSU-CHILL CHL files.
 """
-# Code is adapted from Nitin Bharadwaj's Matlab code
 
 import struct
 import numpy as np
@@ -16,36 +15,14 @@ from .common import radar_coords_to_cart
 
 
 
-def read_mdv(filename, field_names=None, additional_metadata=None,
-             file_field_names=False, exclude_fields=None):
+def read_chl(filename):
     """
-    Read a MDV file.
+    Read a CHL file.
 
     Parameters
     ----------
     filename : str
-        Name of MDV file to read or file-like object pointing to the
-        beginning of such a file.
-    field_names : dict, optional
-        Dictionary mapping MDV data type names to radar field names. If a
-        data type found in the file does not appear in this dictionary or has
-        a value of None it will not be placed in the radar.fields dictionary.
-        A value of None, the default, will use the mapping defined in the
-        Py-ART configuration file.
-    additional_metadata : dict of dicts, optional
-        Dictionary of dictionaries to retrieve metadata from during this read.
-        This metadata is not used during any successive file reads unless
-        explicitly included.  A value of None, the default, will not
-        introduct any addition metadata and the file specific or default
-        metadata as specified by the Py-ART configuration file will be used.
-    file_field_names : bool, optional
-        True to use the MDV data type names for the field names. If this
-        case the field_names parameter is ignored. The field dictionary will
-        likely only have a 'data' key, unless the fields are defined in
-        `additional_metadata`.
-    exclude_fields : list or None, optional
-        List of fields to exclude from the radar object. This is applied
-        after the `file_field_names` and `field_names` parameters.
+        Name of CHL file.
 
     Returns
     -------
@@ -54,22 +31,33 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
 
     Notes
     -----
-    Currently this function can only read polar MDV files which are gzipped.
-    Support for cartesian and non-gzipped file are planned.
+    This is still an alpha-level function so use with caution.
 
     """
-    # create metadata retrieval object
-    filemetadata = FileMetadata('mdv', field_names, additional_metadata,
-                                file_field_names, exclude_fields)
+
+    chl_file = CHLfile(filename)
+    return CHLfile.return_pyart_radar()
+
+    
+
+class CHLfile(object, debug=False):
+    """
+    A file object for CHL data.
+
+    A `CHLFile` object stores metadata and data from a CHL file.  Metadata is
+    stored in dictionaries as attributes of the object, field data is
+    stored as NumPy ndarrays as attributes with the field name.
+
+    Parameters
+    ----------
+    filename : str
+        Name of CHL file to read.
+    debug : bool
+        True to print out debugging information, False to supress
 
 
+    """
 
-
-# Python Class for reading in CHL files. The plan is to eventually move
-# this into pyart.
-
-
-class CHLfile(object):
     field_scale_list = {}
     num_sweeps = 0
     radar_info = []
