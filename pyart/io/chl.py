@@ -36,11 +36,11 @@ def read_chl(filename):
     """
 
     chl_file = CHLfile(filename)
-    return CHLfile.return_pyart_radar()
+    return chl_file.return_pyart_radar()
 
     
 
-class CHLfile(object, debug=False):
+class CHLfile(object):
     """
     A file object for CHL data.
 
@@ -52,10 +52,6 @@ class CHLfile(object, debug=False):
     ----------
     filename : str
         Name of CHL file to read.
-    debug : bool
-        True to print out debugging information, False to supress
-
-
     """
 
     field_scale_list = {}
@@ -104,7 +100,7 @@ class CHLfile(object, debug=False):
                 self._pyart_fields[self._variable_name_lookup[self.field_scale_list[i]['name']][0]] = self._field_to_pyart_field(
                     self.fields[self.field_scale_list[i]['name']], self.field_scale_list[i])
 
-        return pyart.io.radar.Radar(
+        return Radar(
             self._time_dict, self._range_dict, self._pyart_fields, self.metadata, {'data':
                                                                                    self.scan_mode},
             {'data': self._radar_info['latitude']}, {'data': self._radar_info[
@@ -464,10 +460,3 @@ class CHLfile(object, debug=False):
         '\xcf\x81 HCX': ('RHOHCX', 'lag_0_h_co_to_cross_correlation'),
         '\xcf\x81 VCX': ('RHOVCX', 'lag_0_v_co_to_cross_correlation'),
     }
-
-if __name__ == "__main__":
-    filename = '/Users/jhardin/Dropbox/CHL20120705_230217'
-    print("Opening File")
-    chl_reader = CHLfile(filename)
-    radar = chl_reader.return_pyart_radar()
-    display = pyart.graph.RadarDisplay(radar)
