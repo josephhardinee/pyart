@@ -54,25 +54,23 @@ class CHLfile(object):
         Name of CHL file to read.
     """
 
-    field_scale_list = {}
-    num_sweeps = 0
-    radar_info = []
-    processor_info = []
-    azimuth = []
-    elevation = []
-    fixed_angle = []
-
-    sweep_end = []
-
-    data_array = []
-    _pyart_fields = dict()
-    time = []
-
-    fields = {}
-    _current_ray_num = 0
-    metadata = {}
 
     def __init__(self, filename):
+        self.field_scale_list = {}
+        self.num_sweeps = 0
+        self.radar_info = []
+        self.processor_info = []
+        self.azimuth = []
+        self.elevation = []
+        self.fixed_angle = []
+        self.sweep_end = []
+        self. data_array = []
+        self._pyart_fields = dict()
+        self.time = []
+        self.fields = {}
+        self._current_ray_num = 0
+        self.metadata = {}
+
         self.filename = filename
         self._chl_arch_open_archive()
         self._chl_close_archive()
