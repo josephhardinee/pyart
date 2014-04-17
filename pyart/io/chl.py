@@ -54,7 +54,6 @@ class CHLfile(object):
         Name of CHL file to read.
     """
 
-
     def __init__(self, filename):
         self.field_scale_list = {}
         self.num_sweeps = 0
@@ -72,6 +71,22 @@ class CHLfile(object):
         self.metadata = {}
 
         self.filename = filename
+
+        self.field_scale_list = {}
+        self.num_sweeps=0
+        self.radar_info = []
+        self.processor_info = []
+        self.azimuth = []
+        self.elevation = []
+        self.fixed_angle = []
+        self.sweep_end = []
+        self.data_array = []
+        self._pyart_fields = {}
+        self.time = []
+        self.fields = {}
+        self._current_ray_num = 0
+        self.metadata = {}
+
         self._chl_arch_open_archive()
         self._chl_close_archive()
 
@@ -167,7 +182,7 @@ class CHLfile(object):
 
         elif hex(id) == '0x5aa50003':  # processor_info
             packet = dict(
-                zip(self.processor_info, struct.unpack(self.processor_info_fstring, payload)))
+                zip(self.processor_info_t, struct.unpack(self.processor_info_fstring, payload)))
             self.dr = packet['gate_spacing']
 
         elif hex(id) == '0x5aa50002':  # scan_seg
@@ -330,7 +345,7 @@ class CHLfile(object):
     )
     radar_info_fstring = '32s22f'
 
-    processor_info = (
+    processor_info_t = (
         'polarization_mode',
         'processing_mode',
         'pulse_type',
