@@ -20,6 +20,7 @@ from and write data to a number of file formats.
     read_nexrad_archive
     read_nexrad_cdm
     write_cfradial
+    write_uf
     read_grid
     write_grid
 
@@ -38,5 +39,6 @@ from .nexrad_archive import read_nexrad_archive
 from .nexrad_cdm import read_nexrad_cdm
 from .grid_io import read_grid, write_grid
 from .auto_read import read
+from .write_uf import write_uf
 
 __all__ = [s for s in dir() if not s.startswith('_')]
